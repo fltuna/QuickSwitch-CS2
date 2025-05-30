@@ -9,7 +9,7 @@ public class QuickSwitch: BasePlugin
     public override string ModuleAuthor => "faketuna";
     public override string ModuleName => "QuickSwitch";
     public override string ModuleDescription => "Simply removes attack cooldown when switching to knife.";
-    public override string ModuleVersion => "0.0.1";
+    public override string ModuleVersion => "0.0.2";
 
     public readonly FakeConVar<bool> IsEnabled = new("css_quick_switch_enabled", "Enables the quick switch feature.", true);
     
@@ -50,8 +50,8 @@ public class QuickSwitch: BasePlugin
         playerWeapon.NextPrimaryAttackTick = nextAttackTick;
         playerWeapon.NextSecondaryAttackTick = nextAttackTick;
 
+        Utilities.SetStateChanged(playerWeapon, "CBasePlayerWeapon", "m_nNextPrimaryAttackTick");
         Utilities.SetStateChanged(playerWeapon, "CBasePlayerWeapon", "m_nNextSecondaryAttackTick");
-        Utilities.SetStateChanged(player.PlayerPawn.Value, "CBasePlayerPawn", "m_pWeaponServices");
         return HookResult.Continue;
     }
 }
