@@ -6,3 +6,5 @@ Simply removes attack cooldown when switching to knife. that's all.
 ## ConVar
 
 `css_quick_switch_enabled <0|1>` to toggle functionality
+
+`css_quick_switch_cooldown_time <float>` to create quick switch cooldown
