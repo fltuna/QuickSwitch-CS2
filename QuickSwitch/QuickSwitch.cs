@@ -12,6 +12,9 @@ public class QuickSwitch: BasePlugin
     public override string ModuleVersion => "0.0.2";
 
     public readonly FakeConVar<bool> IsEnabled = new("css_quick_switch_enabled", "Enables the quick switch feature.", true);
+    public readonly FakeConVar<float> CooldownTime = new("css_quick_switch_cooldown_time", "Enables the quick switch cooldown time.", 0.0F);
+
+    private readonly Dictionary<int, bool> _isClickedRecently = new();
     
     public override void Load(bool hotReload)
     {
@@ -44,6 +47,19 @@ public class QuickSwitch: BasePlugin
         
         if (!playerWeapon.DesignerName.Contains("knife"))
             return HookResult.Continue;
+
+        if (CooldownTime.Value > 0.0f)
+        {
+            if (_isClickedRecently.TryGetValue(player.Slot, out bool isClickedRecently) && isClickedRecently)
+                return HookResult.Continue;
+        
+            _isClickedRecently.Add(player.Slot, true);
+        
+            AddTimer(CooldownTime.Value, () =>
+            {
+                _isClickedRecently.Remove(player.Slot);
+            });
+        }
         
         var nextAttackTick = Server.TickCount;
 
